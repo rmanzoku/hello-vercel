@@ -10,9 +10,9 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-    return <div className="container mx-auto">
+    return <div className="container mx-auto p-1 bg-gray-400">
         <Header />
-        <main role="main">{children}</main>
+        <main role="main" className="p-5 bg-gray-200">{children}</main>
         <Footer />
     </div>
 }

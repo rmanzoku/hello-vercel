@@ -9,7 +9,8 @@ export default function Home() {
       </Head>
 
       <Layout>
-        <h1>aaaa</h1>
+        <h1>NFT販売所</h1>
+        <p>hogehog</p>
       </Layout>
     </>
   )
