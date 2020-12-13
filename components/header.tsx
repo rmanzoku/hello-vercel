@@ -2,7 +2,7 @@ import Link from 'next/link'
 import AccountBotton from './accountBottun'
 
 export default function Header() {
-    return <header className="bg-gray-300 flex justify-between items-center  md:h-20 h-10 p-2">
+    return <header className="bg-gray-300 flex justify-between items-center md:h-20 h-10 p-2">
         <div className="flex-1 h-full">
             <img src="https://www.doublejump.tokyo/_nuxt/img/8774776.png" alt="logo" className="h-full object-scale-down" />
         </div>
