@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import AccountBotton from './accountBottun'
+import AccountBotton from 'components/accountBottun'
 
 export default function Header() {
     return <header className="bg-gray-300 flex justify-between items-center md:h-20 h-10 p-2">
