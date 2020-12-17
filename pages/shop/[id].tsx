@@ -38,7 +38,7 @@ const Shop: NextPage<MyProps> = ({ id, count, now }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
-    const res = await fetch(process.env.API_HOST + '/api/items')
+    const res = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
     const items: number[] = await res.json()
     const paths: string[] = []
 

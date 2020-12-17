@@ -35,7 +35,7 @@ const Shop: NextPage<MyProps> = ({ ids }) => {
 }
 
 export const getStaticProps: GetStaticProps<MyProps> = async (context) => {
-    const res = await fetch(process.env.API_HOST + '/api/items')
+    const res = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
     const items: number[] = await res.json()
     const ids: string[] = []
 
