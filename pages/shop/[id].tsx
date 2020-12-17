@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps, GetStaticPaths, GetStaticPropsResult } from 'next';
+import { NextPage, GetStaticProps, GetStaticPropsResult, GetStaticPaths, GetStaticPathsResult } from 'next';
 import { ParsedUrlQuery } from 'querystring'
 
 import Head from 'next/head'
@@ -37,8 +37,16 @@ const Shop: NextPage<MyProps> = ({ id, count, now }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+
+    const res = await fetch(process.env.API_HOST + '/api/items')
+    const items: number[] = await res.json()
     const paths: string[] = []
-    return { paths, fallback: true }
+
+    items.map((id) => { paths.push('/shop/' + String(id)) })
+
+    const ret: GetStaticPathsResult = { paths, fallback: false }
+    console.log(paths)
+    return ret
 }
 
 type MyParsedUrlQuery = ParsedUrlQuery & { id: string, count: number }
