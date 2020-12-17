@@ -1,17 +1,26 @@
-import { GetStaticProps, GetStaticPropsContext } from 'next';
+import { NextPage, GetStaticProps, GetStaticPaths, GetStaticPropsResult } from 'next';
 import { ParsedUrlQuery } from 'querystring'
 
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Layout from 'components/layout'
-import { Props } from 'react';
+import { useState, useEffect, Props } from 'react'
+import { useInterval } from 'ahooks';
 
-export default function Shop({ id }) {
+const Shop: NextPage<MyProps> = ({ id, count, now }) => {
     const router = useRouter()
     if (router.isFallback) {
-        return <div>Loading...</div>
+        return <div>loading</div>
     }
+    const [time, setTime] = useState(now)
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setTime(time + 1);
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // })
+    useInterval(() => { setTime(Date.now()) }, 1000)
 
     return (
         <>
@@ -20,22 +29,29 @@ export default function Shop({ id }) {
             </Head>
 
             <Layout>
+                <p>{time}</p>
                 <Image src={"/images/kami/256/" + id + ".png"} width="128" height="128" />
             </Layout>
         </>
     )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
     const paths: string[] = []
     return { paths, fallback: true }
 }
 
-interface Params extends ParsedUrlQuery {
-    id: string
+type MyParsedUrlQuery = ParsedUrlQuery & { id: string, count: number }
+type MyProps = {
+    id: string,
+    count: number,
+    now: number
 }
 
-export const getStaticProps: GetStaticProps<{}, Params> = async (context) => {
-    const params = context.params as Params
-    return { props: { id: params.id } }
+export const getStaticProps: GetStaticProps<MyProps, MyParsedUrlQuery> = async (context) => {
+    const params = context.params as MyParsedUrlQuery
+    const ret: GetStaticPropsResult<MyProps> = { props: { id: params.id, count: 100, now: Date.now() }, revalidate: 60 }
+    return ret
 }
+
+export default Shop;
