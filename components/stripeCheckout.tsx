@@ -1,24 +1,25 @@
 import { useState, FormEventHandler } from 'react'
 import { NextComponentType } from 'next'
 import getStripe from 'utils/get-stripe'
-import { useInterval } from 'ahooks';
+import { useInterval } from 'ahooks'
+import styleStripe from "styles/stripe.module.css"
 
-interface MyProps {
+interface Props {
 }
 
-interface MyState {
+interface State {
     locked: boolean
     status: string
 }
 
-const StripeCheckout: NextComponentType = ({ children }) => {
+const StripeCheckout: NextComponentType<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
         setLoading(true)
 
-        const sessionId = "cs_test_a1iNWVJXnEgkRhvXkwcr7bcbvfgRWNFr7MWXOrMHSqbspKpwRwhBj1zmI0"
+        const sessionId = "cs_test_a1BEVwucAnb7TTXJIfH7upDYKbaG0kNpePH10uZulmTSRWxZd7K91OKgxh"
 
         const stripe = await getStripe()
         const { error } = await stripe!.redirectToCheckout({
@@ -31,7 +32,7 @@ const StripeCheckout: NextComponentType = ({ children }) => {
     return (
         <form onSubmit={handleSubmit}>
             <button
-                className={`box-content p-1 border-2 ${loading ? "bg-red-500" : "bg-blue-500"}`}
+                className={styleStripe.checkoutButton}
                 type="submit"
                 disabled={loading}
             >

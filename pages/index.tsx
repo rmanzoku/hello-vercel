@@ -12,12 +12,7 @@ export default function Home() {
       </Head>
 
       <Layout>
-        <ul className="align-center">
-          {ids.map((id) => {
-            return <li className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"/images/kami/256/" + id + ".png"} width="128" height="128" /></a></Link></li>
-
-          })}
-        </ul>
+        <p>hello</p>
       </Layout>
     </>
   )

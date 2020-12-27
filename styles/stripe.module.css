@@ -1,0 +1,15 @@
+.checkoutButton {
+    background: #8f6ed5;
+    transition: box-shadow 2s;
+    border-radius: 6px;
+    color: white;
+    font-size: larger;
+    border: 0;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+    width: 100%;
+}

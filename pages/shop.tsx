@@ -6,11 +6,11 @@ import { useRouter } from 'next/router'
 import Layout from 'components/layout'
 
 
-type MyProps = {
+type Props = {
     ids: string[],
 }
 
-const Shop: NextPage<MyProps> = ({ ids }) => {
+const Shop: NextPage<Props> = ({ ids }) => {
     const router = useRouter()
     if (router.isFallback) {
         return <div>loading</div>
@@ -25,7 +25,7 @@ const Shop: NextPage<MyProps> = ({ ids }) => {
             <Layout>
                 <ul className="align-center">
                     {ids.map((id) => {
-                        return <li className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"/images/kami/256/" + id + ".png"} width="128" height="128" /></a></Link></li>
+                        return <li key={id} className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"/images/kami/256/" + id + ".png"} width="128" height="128" /></a></Link></li>
 
                     })}
                 </ul>
@@ -34,14 +34,14 @@ const Shop: NextPage<MyProps> = ({ ids }) => {
     )
 }
 
-export const getStaticProps: GetStaticProps<MyProps> = async (context) => {
+export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const res = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
     const items: number[] = await res.json()
     const ids: string[] = []
 
     items.map((id) => { ids.push(String(id)) })
 
-    const ret: GetStaticPropsResult<MyProps> = { props: { ids: ids }, revalidate: 60 }
+    const ret: GetStaticPropsResult<Props> = { props: { ids: ids }, revalidate: 60 }
     return ret
 }
 
