@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from 'components/layout'
 import { useInterval } from 'ahooks'
+import { useState } from 'react'
 
 type Props = {
     ids: string[],
@@ -16,9 +17,11 @@ const Shop: NextPage<Props> = (context) => {
         return <div>loading</div>
     }
 
-    let ids = context.ids
+    const [ids, setIds] = useState(context.ids)
+
     useInterval(async () => {
-        ids = await fetchIds()
+        const ids = await fetchIds();
+        setIds(ids)
     }, 5000, { immediate: true })
 
     return (
