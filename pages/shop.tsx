@@ -1,20 +1,25 @@
-import { NextPage, GetStaticProps, GetStaticPropsResult } from 'next';
+import { NextPage, GetStaticProps, GetStaticPropsContext } from 'next';
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from 'components/layout'
-
+import { useInterval } from 'ahooks'
 
 type Props = {
     ids: string[],
 }
 
-const Shop: NextPage<Props> = ({ ids }) => {
+const Shop: NextPage<Props> = (context) => {
     const router = useRouter()
     if (router.isFallback) {
         return <div>loading</div>
     }
+
+    let ids = context.ids
+    useInterval(async () => {
+        ids = await fetchIds()
+    }, 5000, { immediate: true })
 
     return (
         <>
@@ -34,19 +39,22 @@ const Shop: NextPage<Props> = ({ ids }) => {
     )
 }
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+const fetchIds = async () => {
     let ids: string[] = []
-    let revalidate: number = 1
-
     try {
-        const response = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
+        const response = await fetch(process.env.NEXT_PUBLIC_PROTOCOL + '://' + process.env.NEXT_PUBLIC_API_URL + '/api/items')
         const items: number[] = await response.json()
         items.map((id) => { ids.push(String(id)) })
-        revalidate = 60
     } catch (e) {
         console.warn(e)
     }
 
+    return ids
+}
+
+export const getStaticProps: GetStaticProps<Props> = async (context: GetStaticPropsContext) => {
+    const ids = await fetchIds();
+    const revalidate = ids.length ? 60 : 1
     return { props: { ids }, revalidate }
 }
 
