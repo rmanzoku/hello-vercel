@@ -35,14 +35,17 @@ const Shop: NextPage<Props> = ({ ids }) => {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
-    const res = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
-    const items: number[] = await res.json()
-    const ids: string[] = []
+    let ids: string[] = []
+    let revalidate: number = 0
 
-    items.map((id) => { ids.push(String(id)) })
-
-    const ret: GetStaticPropsResult<Props> = { props: { ids: ids }, revalidate: 60 }
-    return ret
+    try {
+        const response = await fetch(process.env.PROTOCOL + '://' + process.env.API_URL + '/api/items')
+        const items: number[] = await response.json()
+        items.map((id) => { ids.push(String(id)) })
+    } catch (e) {
+        console.warn(e)
+    }
+    return { props: { ids }, revalidate }
 }
 
 export default Shop;
