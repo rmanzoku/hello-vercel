@@ -11,12 +11,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return new Promise((resolve, reject) => {
         try {
             proxy.web(req, res, { proxyTimeout: 5000 }, (e) => {
-                console.warn(e.message)
+                reject(e)
             })
-            return resolve
+            resolve
         } catch (e) {
-            console.warn(e.message)
-            return reject
+            reject(e)
         }
     })
 }
