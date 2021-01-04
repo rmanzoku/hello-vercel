@@ -12,6 +12,18 @@ interface State {
     status: string
 }
 
+
+const getSessionId = async () => {
+    const url = "/api/proxy/prime/checkout_session"
+    try {
+        const response = await fetch(url)
+        const res = await response.json()
+        return res
+    } catch (e) {
+        console.warn(e)
+    }
+}
+
 const StripeCheckout: NextComponentType<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
@@ -19,11 +31,12 @@ const StripeCheckout: NextComponentType<Props> = ({ children }) => {
         e.preventDefault()
         setLoading(true)
 
-        const sessionId = "cs_test_a1BEVwucAnb7TTXJIfH7upDYKbaG0kNpePH10uZulmTSRWxZd7K91OKgxh"
+        const { sessionId } = await getSessionId()
+        console.log(sessionId)
 
         const stripe = await getStripe()
         const { error } = await stripe!.redirectToCheckout({
-            sessionId: sessionId,
+            sessionId: sessionId!,
         });
         console.warn(error.message);
         setLoading(false);

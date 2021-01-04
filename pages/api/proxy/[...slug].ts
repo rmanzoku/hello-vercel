@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http'
 import httpProxy from 'http-proxy';
 
-const target = "http://static.s3.prod.mch.djty.co.s3-ap-northeast-1.amazonaws.com/"
+const target = "http://localhost:9000/"
 
 const proxy = httpProxy.createProxyServer({ target, changeOrigin: true });
 

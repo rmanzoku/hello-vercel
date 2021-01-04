@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http'
 import { URL } from 'url'
 
-let ret: number[] = [5001, 5002, 5003, 5004, 5005, 4001, 4002, 4003, 4004, 4005];
+let ret: number[] = [5011, 5012, 5013, 5031, 5032, 5033];
 
 export default function handler(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url!, `http://${req.headers.host}`)

@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps, GetStaticPropsResult, GetStaticPaths } from 'next'
+import { NextPage, GetStaticPaths, InferGetStaticPropsType, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 
 import Head from 'next/head'
@@ -9,11 +9,7 @@ import StripeCheckoutfrom from 'components/stripeCheckout'
 import { useState } from 'react'
 import { useInterval } from 'ahooks'
 
-type Props = {
-    id: string,
-    count: number,
-    now: number
-}
+type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Shop: NextPage<Props> = ({ id, count, now }) => {
     const router = useRouter()
@@ -31,7 +27,7 @@ const Shop: NextPage<Props> = ({ id, count, now }) => {
 
             <Layout>
                 <p>{time}</p>
-                <Image src={"/images/kami/256/" + id + ".png"} width="128" height="128" />
+                <Image src={"/images/kami-types/" + id + ".png"} width="128" height="128" />
                 <StripeCheckoutfrom>Buy Now!!</StripeCheckoutfrom>
             </Layout>
         </>
@@ -44,10 +40,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 type Query = ParsedUrlQuery & { id: string, count: number }
 
-export const getStaticProps: GetStaticProps<Props, Query> = async (context) => {
+export const getStaticProps = async (context: GetStaticPropsContext<Query>) => {
     const params = context.params!
-    const ret: GetStaticPropsResult<Props> = { props: { id: params.id, count: 100, now: Date.now() }, revalidate: 60 }
-    return ret
+    return {
+        props: {
+            id: params.id,
+            count: 100,
+            now: Date.now()
+        },
+        revalidate: 60
+    }
 }
 
 export default Shop;
