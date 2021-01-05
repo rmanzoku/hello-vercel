@@ -13,7 +13,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             proxy.web(req, res, { proxyTimeout: 5000 }, (e) => {
                 reject(e)
             })
-            resolve
+            resolve(res)
         } catch (e) {
             reject(e)
         }

@@ -12,16 +12,22 @@ interface State {
     status: string
 }
 
+interface sessionId {
+    sessionId: string
+}
 
-const getSessionId = async () => {
+
+const getSessionId = () => {
     const url = "/api/proxy/prime/checkout_session"
-    try {
-        const response = await fetch(url)
-        const res = await response.json()
-        return res
-    } catch (e) {
-        console.warn(e)
-    }
+    return new Promise<sessionId>(async (resolve, reject) => {
+        try {
+            const response = await fetch(url)
+            const res: sessionId = await response.json()
+            resolve(res)
+        } catch (e) {
+            reject(e)
+        }
+    })
 }
 
 const StripeCheckout: NextComponentType<Props> = ({ children }) => {
