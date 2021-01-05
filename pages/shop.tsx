@@ -7,7 +7,7 @@ import Layout from 'components/layout'
 import { useInterval } from 'ahooks'
 import { useState } from 'react'
 
-type Props = {
+interface Props {
     ids: string[],
 }
 
