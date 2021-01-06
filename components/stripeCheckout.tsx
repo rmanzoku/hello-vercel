@@ -3,6 +3,9 @@ import { NextComponentType } from 'next'
 import getStripe from 'utils/get-stripe'
 import { useInterval } from 'ahooks'
 import styleStripe from 'styles/stripe.module.css'
+import { OpenAPI, PrimeService, stripeCheckoutSession } from 'protobuf/web/prime/dist'
+
+OpenAPI.BASE = "/api/proxy/"
 
 interface Props {
 }
@@ -16,14 +19,11 @@ interface sessionId {
     sessionId: string
 }
 
-
 const getSessionId = (successURL: string, cancelURL: string) => {
-    const url = `/api/proxy/prime/checkout_session?success_url=${successURL}&cancel_url=${cancelURL}`
-    return new Promise<sessionId>(async (resolve, reject) => {
+    return new Promise<stripeCheckoutSession>(async (resolve, reject) => {
         try {
-            const response = await fetch(url)
-            const res: sessionId = await response.json()
-            resolve(res)
+            const checkoutSession = await PrimeService.primeServiceGetMyCheckoutSession(successURL, cancelURL)
+            resolve(checkoutSession as stripeCheckoutSession)
         } catch (e) {
             reject(e)
         }

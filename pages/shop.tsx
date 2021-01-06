@@ -31,6 +31,7 @@ const Shop: NextPage<Props> = (context) => {
             </Head>
 
             <Layout>
+                <p>aaaa</p>
                 <ul className="align-center">
                     {ids.map((id) => {
                         return <li key={id} className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"/images/kami-types/" + id + ".png"} width="128" height="128" /></a></Link></li>
