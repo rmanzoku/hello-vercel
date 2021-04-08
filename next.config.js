@@ -3,6 +3,7 @@ module.exports = {
         //API_HOST: "http://localhost:3000"
     },
     images: {
-        path: 'https://d311houydqp17.cloudfront.net/next/image/',
+        domains: ['core.mycryptosaga.net'],
+        path: 'https://d14qri5uuztdmb.cloudfront.net/_next/image/',
     },
 }

@@ -27,7 +27,7 @@ const Shop: NextPage<Props> = ({ id, count, now }) => {
 
             <Layout>
                 <p>{time}</p>
-                <Image src={"/images/kami-types/" + id + ".png"} width="128" height="128" />
+                <Image src={"https://core.mycryptosaga.net/images/nft/ja/" + id + ".png"} width="128" height="128" />
                 <StripeCheckoutfrom>Buy Now!!</StripeCheckoutfrom>
             </Layout>
         </>

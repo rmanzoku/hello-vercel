@@ -34,7 +34,7 @@ const Shop: NextPage<Props> = (context) => {
                 <p>aaaa</p>
                 <ul className="align-center">
                     {ids.map((id) => {
-                        return <li key={id} className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"/images/kami-types/" + id + ".png"} width="128" height="128" /></a></Link></li>
+                        return <li key={id} className="inline p-1"><Link href={"/shop/" + id}><a><Image src={"https://core.mycryptosaga.net/images/nft/ja/" + id + ".png"} width="128" height="128" /></a></Link></li>
 
                     })}
                 </ul>
