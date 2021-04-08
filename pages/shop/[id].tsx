@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Layout from 'components/layout'
 import StripeCheckoutfrom from 'components/stripeCheckout'
+import SigningButton from 'components/signingButton'
 import { useState } from 'react'
 import { useInterval } from 'ahooks'
 
@@ -17,7 +18,7 @@ const Shop: NextPage<Props> = ({ id, count, now }) => {
         return <div>loading</div>
     }
     const [time, setTime] = useState(now)
-    useInterval(() => setTime(Date.now()), 1000)
+    // useInterval(() => setTime(Date.now()), 1000)
 
     return (
         <>
@@ -28,7 +29,8 @@ const Shop: NextPage<Props> = ({ id, count, now }) => {
             <Layout>
                 <p>{time}</p>
                 <Image src={"https://core.mycryptosaga.net/images/nft/ja/" + id + ".png"} width="128" height="128" />
-                <StripeCheckoutfrom>Buy Now!!</StripeCheckoutfrom>
+                <SigningButton now={now}>Sign</SigningButton>
+                {/* <StripeCheckoutfrom>Buy Now!!</StripeCheckoutfrom> */}
             </Layout>
         </>
     )
