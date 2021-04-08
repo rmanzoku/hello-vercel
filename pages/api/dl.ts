@@ -13,6 +13,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const url = new URL("http://localhost" + req.url!); // parseするために適当
     const sig = url.searchParams.get("sig")!
     const t = url.searchParams.get("t")!
+
+    if (Date.now() - parseInt(t) > 60) {
+        res.statusCode = 400
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify("sig timeout"))
+    }
+
     const signer = ethers.utils.verifyMessage(t, sig)
     const provider = new ethers.providers.JsonRpcProvider(rpc)
     var abi = [
