@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from 'components/layout'
-import { useInterval } from 'ahooks'
+
 import { useState } from 'react'
 
 interface Props {
@@ -19,10 +19,10 @@ const Shop: NextPage<Props> = (context) => {
 
     const [ids, setIds] = useState(context.ids)
 
-    useInterval(async () => {
-        const ids = await fetchIds();
-        setIds(ids)
-    }, 5000, { immediate: true })
+    // useInterval(async () => {
+    //     const ids = await fetchIds();
+    //     setIds(ids)
+    // }, 5000, { immediate: true })
 
     return (
         <>

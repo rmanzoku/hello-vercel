@@ -8,7 +8,7 @@ import Layout from 'components/layout'
 import StripeCheckoutfrom from 'components/stripeCheckout'
 import SigningButton from 'components/signingButton'
 import { useState } from 'react'
-import { useInterval } from 'ahooks'
+
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 

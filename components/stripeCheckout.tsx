@@ -1,7 +1,6 @@
 import { useState, FormEventHandler } from 'react'
 import { NextComponentType } from 'next'
 import getStripe from 'utils/get-stripe'
-import { useInterval } from 'ahooks'
 import styleStripe from 'styles/stripe.module.css'
 import { OpenAPI, PrimeService, stripeCheckoutSession } from 'protobuf/web/prime/dist'
 
