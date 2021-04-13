@@ -13,12 +13,7 @@ import { useState } from 'react'
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const Shop: NextPage<Props> = ({ id, count, now }) => {
-    const router = useRouter()
-    if (router.isFallback) {
-        return <div>loading</div>
-    }
-    const [time, setTime] = useState(now)
-    // useInterval(() => setTime(Date.now()), 1000)
+    const [Url, setUrl] = useState("blank")
 
     return (
         <>
@@ -27,10 +22,10 @@ const Shop: NextPage<Props> = ({ id, count, now }) => {
             </Head>
 
             <Layout>
-                <p>{time}</p>
+                <p>{Url}</p>
+                {/* <p>{time}</p> */}
                 <Image src={"https://core.mycryptosaga.net/images/nft/ja/" + id + ".png"} width="128" height="128" />
-                <SigningButton now={now}>Sign</SigningButton>
-                {/* <StripeCheckoutfrom>Buy Now!!</StripeCheckoutfrom> */}
+                <SigningButton now={now} setUrl={setUrl}>Sign</SigningButton>
             </Layout>
         </>
     )

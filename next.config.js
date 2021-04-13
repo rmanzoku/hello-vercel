@@ -6,4 +6,7 @@ module.exports = {
         domains: ['core.mycryptosaga.net'],
         path: 'https://d14qri5uuztdmb.cloudfront.net/_next/image/',
     },
+    future: {
+        webpack5: true,
+    },
 }
