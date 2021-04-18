@@ -2,6 +2,8 @@ import { NextPage, GetStaticProps, GetStaticPropsContext, NextComponentType, Nex
 import { useEthereumContext } from "contexts/ethereum"
 import { MouseEventHandler, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import Web3 from 'web3';
+import { AbstractProvider, } from "web3-core"
+import { JsonRpcPayload } from "web3-core-helpers"
 import { ethers } from 'ethers';
 
 interface Props {
@@ -12,7 +14,10 @@ const Page: NextPage<Props> = (context) => {
     const message = "hello world"
 
     const [sigEthers, setSigEthers] = useState("")
+    const [sigEthersWithHash, setSigEthersWithHash] = useState("")
+    const [sigEthersRaw, setSigEthersRaw] = useState("")
     const [sigWeb3, setSigWeb3] = useState("")
+    const [sigWeb3Raw, setSigWeb3Raw] = useState("")
 
     const eth = useEthereumContext()
 
@@ -55,16 +60,37 @@ const Page: NextPage<Props> = (context) => {
                     </tr>
 
                     <tr className="bg-gray-100 border-b border-gray-200">
-                        <td className="px-4 py-3">signing ethers</td>
+                        <td className="px-4 py-3">Sign ethers</td>
                         <td className="px-4 py-3"><SigningButtonEthers provider={eth.provider} msg={message} setSigFn={setSigEthers}>Sign</SigningButtonEthers></td>
                         <td className="px-4 py-3">{sigEthers}</td>
                         <td className="px-4 py-3"></td>
                     </tr>
 
                     <tr className="bg-gray-100 border-b border-gray-200">
-                        <td className="px-4 py-3">signing web3</td>
+                        <td className="px-4 py-3">Sign ethers with hash</td>
+                        <td className="px-4 py-3"><SigningButtonEthersWithHash provider={eth.provider} msg={message} setSigFn={setSigEthersWithHash}>Sign</SigningButtonEthersWithHash></td>
+                        <td className="px-4 py-3">{sigEthersWithHash}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Sign ethers raw</td>
+                        <td className="px-4 py-3"><SigningButtonEthersRaw provider={eth.provider} msg={message} setSigFn={setSigEthersRaw} address={account}>Sign</SigningButtonEthersRaw></td>
+                        <td className="px-4 py-3">{sigEthersRaw}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Sign web3</td>
                         <td className="px-4 py-3"><SigningButtonWeb3 web3={eth.web3} msg={message} setSigFn={setSigWeb3}>Sign</SigningButtonWeb3></td>
                         <td className="px-4 py-3">{sigWeb3}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Sign web3 raw</td>
+                        <td className="px-4 py-3"><SigningButtonWeb3Raw web3={eth.web3} msg={message} setSigFn={setSigWeb3Raw} address={account}>Sign</SigningButtonWeb3Raw></td>
+                        <td className="px-4 py-3">{sigWeb3Raw}</td>
                         <td className="px-4 py-3"></td>
                     </tr>
 
@@ -105,11 +131,58 @@ interface SigningProps {
     provider?: ethers.providers.JsonRpcProvider
     setSigFn: Dispatch<SetStateAction<string>>
     setMemoFn?: Dispatch<SetStateAction<string>>
+    address?: string
 }
 
 const SigningButtonEthers: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
     const handleClick: MouseEventHandler = async (e) => {
         props.provider!.getSigner().signMessage(props.msg)
+            .then((sig) => {
+                props.setSigFn(sig)
+            })
+            .catch((e) => {
+                alert(e)
+            })
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
+    )
+}
+
+const SigningButtonEthersRaw: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        const msgByte = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(props.msg)) // 
+        const params = [
+            props.address!,
+            msgByte
+        ]
+        console.log(params)
+        const sig = (await props.provider!.send("personal_sign", params)) as string
+        props.setSigFn(sig)
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
+    )
+}
+
+const SigningButtonEthersWithHash: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        const msg = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(props.msg))
+        props.provider!.getSigner().signMessage(msg)
             .then((sig) => {
                 props.setSigFn(sig)
             })
@@ -144,6 +217,44 @@ const SigningButtonWeb3: NextComponentType<NextPageContext, {}, SigningProps> = 
 
             })
 
+        })
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
+    )
+}
+
+const SigningButtonWeb3Raw: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        const msgByte = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(props.msg))
+        const params = [
+            props.address!,
+            msgByte
+        ]
+        const payload: JsonRpcPayload = {
+            jsonrpc: "2.0",
+            method: "personal_sign",
+            params: params
+        }
+
+        const provider = props.web3!.currentProvider as AbstractProvider
+        provider.send!(payload, (e, res) => {
+            if (e) {
+                alert(e)
+            }
+
+            if (res?.error) {
+                alert(res.error)
+            }
+
+            props.setSigFn(res!.result!)
         })
     }
 
