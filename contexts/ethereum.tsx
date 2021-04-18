@@ -22,6 +22,7 @@ const Ethereum: NextComponentType = ({ children }) => {
     const [ethereum, setEthereum] = useState(defaultEthereumContext)
 
     useEffect(() => {
+        console.log("do effect in Ethereum")
         if (window.ethereum) {
             const p = new ethers.providers.Web3Provider(window.ethereum as any)
             const w = new Web3(window.ethereum as any)

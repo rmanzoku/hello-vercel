@@ -81,7 +81,7 @@ const Page: NextPage<Props> = (context) => {
                     </tr>
 
                     <tr className="bg-gray-100 border-b border-gray-200">
-                        <td className="px-4 py-3">Sign web3</td>
+                        <td className="px-4 py-3">Sign web3 personal sign</td>
                         <td className="px-4 py-3"><SigningButtonWeb3 web3={eth.web3} msg={message} setSigFn={setSigWeb3}>Sign</SigningButtonWeb3></td>
                         <td className="px-4 py-3">{sigWeb3}</td>
                         <td className="px-4 py-3"></td>
@@ -163,7 +163,6 @@ const SigningButtonEthersRaw: NextComponentType<NextPageContext, {}, SigningProp
             props.address!,
             msgByte
         ]
-        console.log(params)
         const sig = (await props.provider!.send("personal_sign", params)) as string
         props.setSigFn(sig)
     }
