@@ -12,6 +12,7 @@ interface Window {
 declare namespace NodeJS {
     interface Process {
         browser: bool
+        client: bool
     }
     interface Global {
         proto: any
