@@ -4,7 +4,8 @@ declare module "*.css" {
 }
 
 interface metamaskEthereum {
-    send: (method: string) => Promise<Array<string>>
+    request: (method: string, params?: any) => Promise<unknown>
+    send: (method: string) => Promise<unknown>
     selectedAddress: string
 }
 

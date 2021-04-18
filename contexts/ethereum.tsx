@@ -70,7 +70,7 @@ const Ethereum: NextComponentType = ({ children }) => {
                 potentialWallet: potentialWalletName,
             })
         }
-    }, [ethereum.ethereum, ethereum.web3])
+    }, [])
 
     return <>
         <EthereumContext.Provider value={ethereum}>
