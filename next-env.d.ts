@@ -3,9 +3,14 @@ declare module "*.css" {
     export default styles;
 }
 
+interface metamaskEthereum {
+    send: (method: string) => Promise<Array<string>>
+    selectedAddress: string
+}
+
 interface Window {
     __GRPCWEB_DEVTOOLS__: any
-    ethereum: any
+    ethereum: metamaskEthereum | undefined
 }
 
 

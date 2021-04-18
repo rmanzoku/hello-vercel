@@ -2,13 +2,16 @@ import { NextComponentType } from "next"
 import { createContext, useContext, useEffect, useState } from "react"
 import { ethers } from "ethers"
 import Web3 from "web3"
+import { resolve } from "node:path"
+
 
 interface EthereumContextType {
     hasWallet: boolean
     provider: ethers.providers.JsonRpcProvider
     web3?: Web3
-    ethereum?: any
+    ethereum?: metamaskEthereum
     potentialWallet: string[]
+    enableFn?: () => Promise<string>
 }
 
 const anonymousProvider = new ethers.providers.JsonRpcProvider("https://node.mch.plus/evm/chainid/1")
@@ -20,8 +23,8 @@ const Ethereum: NextComponentType = ({ children }) => {
 
     useEffect(() => {
         if (window.ethereum) {
-            const p = new ethers.providers.Web3Provider(window.ethereum)
-            const w = new Web3(window.ethereum)
+            const p = new ethers.providers.Web3Provider(window.ethereum as any)
+            const w = new Web3(window.ethereum as any)
 
             let potentialWalletName: string[] = []
             const currentProvider = w.currentProvider as any
@@ -31,12 +34,18 @@ const Ethereum: NextComponentType = ({ children }) => {
                 }
             }
 
+            const enableMetamask = async (): Promise<string> => {
+                await window.ethereum!.send('eth_requestAccounts')
+                return window.ethereum!.selectedAddress
+            }
+
             setEthereum({
                 hasWallet: true,
                 provider: p,
                 web3: w,
                 ethereum: window.ethereum,
-                potentialWallet: potentialWalletName
+                potentialWallet: potentialWalletName,
+                enableFn: enableMetamask
             })
         }
     }, [ethereum.ethereum])
@@ -47,6 +56,8 @@ const Ethereum: NextComponentType = ({ children }) => {
         </EthereumContext.Provider>
     </>
 }
+
+
 
 const useEthereumContext = () => useContext(EthereumContext)
 

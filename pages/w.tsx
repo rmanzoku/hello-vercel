@@ -35,8 +35,15 @@ const Page: NextPage<Props> = (context) => {
 
                     <tr className="bg-gray-100 border-b border-gray-200">
                         <td className="px-4 py-3">Account</td>
-                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3"><Enable enableFn={eth.enableFn} setAccountFn={setAccount}>Enable</Enable></td>
                         <td className="px-4 py-3">{account}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">enable</td>
+                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3"></td>
                         <td className="px-4 py-3"></td>
                     </tr>
 
@@ -72,6 +79,30 @@ const Page: NextPage<Props> = (context) => {
 
             </table>
         </>
+    )
+}
+
+interface EnableProps {
+    enableFn?: () => Promise<string>
+    setAccountFn: Dispatch<SetStateAction<string>>
+}
+
+const Enable: NextComponentType<NextPageContext, {}, EnableProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        if (!props.enableFn) return
+        props.enableFn().then(v => {
+            props.setAccountFn(v)
+        })
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
     )
 }
 
