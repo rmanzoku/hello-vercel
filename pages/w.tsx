@@ -41,13 +41,6 @@ const Page: NextPage<Props> = (context) => {
                     </tr>
 
                     <tr className="bg-gray-100 border-b border-gray-200">
-                        <td className="px-4 py-3">enable</td>
-                        <td className="px-4 py-3">NA</td>
-                        <td className="px-4 py-3"></td>
-                        <td className="px-4 py-3"></td>
-                    </tr>
-
-                    <tr className="bg-gray-100 border-b border-gray-200">
                         <td className="px-4 py-3">PotentialWallet</td>
                         <td className="px-4 py-3">NA</td>
                         <td className="px-4 py-3">{eth.potentialWallet.join(",")}</td>
@@ -89,7 +82,7 @@ interface EnableProps {
 
 const Enable: NextComponentType<NextPageContext, {}, EnableProps> = (props) => {
     const handleClick: MouseEventHandler = async (e) => {
-        if (!props.enableFn) return
+        if (props.enableFn === undefined) return
         props.enableFn().then(v => {
             props.setAccountFn(v)
         })
