@@ -47,8 +47,30 @@ const Ethereum: NextComponentType = ({ children }) => {
                 potentialWallet: potentialWalletName,
                 enableFn: enableMetamask
             })
+            return
         }
-    }, [ethereum.ethereum])
+
+        if (window.web3) {
+            const p = new ethers.providers.Web3Provider(window.web3)
+            const w = new Web3(window.web3 as any)
+
+            let potentialWalletName: string[] = []
+            const currentProvider = w.currentProvider as any
+            for (let key in currentProvider) {
+                if (key.startsWith("is")) {
+                    potentialWalletName.push(key)
+                }
+            }
+
+            setEthereum({
+                hasWallet: true,
+                provider: p,
+                web3: w,
+                ethereum: undefined,
+                potentialWallet: potentialWalletName,
+            })
+        }
+    }, [ethereum.ethereum, ethereum.web3])
 
     return <>
         <EthereumContext.Provider value={ethereum}>

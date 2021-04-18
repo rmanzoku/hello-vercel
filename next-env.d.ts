@@ -11,6 +11,7 @@ interface metamaskEthereum {
 interface Window {
     __GRPCWEB_DEVTOOLS__: any
     ethereum: metamaskEthereum | undefined
+    web3: any | undefined
 }
 
 

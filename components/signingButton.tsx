@@ -15,7 +15,7 @@ interface State {
 
 const SigningButton: NextComponentType<NextPageContext, {}, Props> = (props) => {
     const handleClick: MouseEventHandler = async (e) => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         provider.getSigner().signMessage(props.now.toString())
             .then((sig) => {
                 fetch("/api/dl?sig=" + sig + "&t=" + props.now.toString()).then((ret) => {

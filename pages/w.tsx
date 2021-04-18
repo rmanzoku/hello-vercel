@@ -121,7 +121,7 @@ const SigningButtonEthers: NextComponentType<NextPageContext, {}, SigningProps> 
                 props.setSigFn(sig)
             })
             .catch((e) => {
-                console.error(e)
+                alert(e)
             })
     }
 
@@ -141,11 +141,11 @@ const SigningButtonWeb3: NextComponentType<NextPageContext, {}, SigningProps> = 
         const web3 = props.web3!
         web3.eth.getAccounts((e, accounts) => {
             if (e) {
-                console.error(e)
+                alert(e)
             }
             web3.eth.personal.sign(props.msg, accounts[0], "", (e, sig) => {
                 if (e) {
-                    console.error(e)
+                    alert(e)
                 }
                 props.setSigFn(sig)
 
