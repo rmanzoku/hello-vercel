@@ -21,6 +21,23 @@ const Page: NextPage<Props> = (context) => {
 
     const eth = useEthereumContext()
 
+    const version = (): string => {
+        let ret = ""
+        if (!eth.hasWallet) {
+            ret += "no wallet"
+        }
+
+        if (eth.ethereum) {
+            ret += "ethereum"
+        }
+
+        if (eth.inpageWeb3) {
+            ret += "web3 " + eth.inpageWeb3.version
+        }
+
+        return ret
+    }
+
     useEffect(() => {
         if (!eth.hasWallet) return;
         const signer = eth.provider.getSigner()
@@ -36,6 +53,13 @@ const Page: NextPage<Props> = (context) => {
                         <th className="px-4 py-3">Buttom</th>
                         <th className="px-4 py-3">Result</th>
                         <th className="px-4 py-3">Memo</th>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Version</td>
+                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3">{version()}</td>
+                        <td className="px-4 py-3"></td>
                     </tr>
 
                     <tr className="bg-gray-100 border-b border-gray-200">

@@ -2,14 +2,15 @@ import { NextComponentType } from "next"
 import { createContext, useContext, useEffect, useState } from "react"
 import { ethers } from "ethers"
 import Web3 from "web3"
-import { resolve } from "node:path"
+import { MetaMaskInpageProvider } from "@metamask/inpage-provider"
 
 
 interface EthereumContextType {
     hasWallet: boolean
     provider: ethers.providers.JsonRpcProvider
     web3?: Web3
-    ethereum?: metamaskEthereum
+    inpageWeb3?: Web3
+    ethereum?: MetaMaskInpageProvider
     potentialWallet: string[]
     enableFn?: () => Promise<string>
 }
@@ -67,7 +68,7 @@ const Ethereum: NextComponentType = ({ children }) => {
                 hasWallet: true,
                 provider: p,
                 web3: w,
-                ethereum: undefined,
+                inpageWeb3: window.web3,
                 potentialWallet: potentialWalletName,
             })
         }
