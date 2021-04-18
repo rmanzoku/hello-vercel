@@ -1,13 +1,19 @@
-import { NextPage, GetStaticProps, GetStaticPropsContext } from 'next';
+import { NextPage, GetStaticProps, GetStaticPropsContext, NextComponentType, NextPageContext } from 'next';
 import { useEthereumContext } from "contexts/ethereum"
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import Web3 from 'web3';
+import { ethers } from 'ethers';
 
 interface Props {
-    ids: string[],
 }
 
 const Page: NextPage<Props> = (context) => {
     const [account, setAccount] = useState("Account")
+    const message = "hello world"
+
+    const [sigEthers, setSigEthers] = useState("")
+    const [sigWeb3, setSigWeb3] = useState("")
+
     const eth = useEthereumContext()
 
     useEffect(() => {
@@ -18,14 +24,115 @@ const Page: NextPage<Props> = (context) => {
 
     return (
         <>
-            <div>{account}</div>
+            <table className="rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800">
+                <tbody>
+                    <tr className="text-left border-b-2 border-gray-300">
+                        <th className="px-4 py-3">Name</th>
+                        <th className="px-4 py-3">Buttom</th>
+                        <th className="px-4 py-3">Result</th>
+                        <th className="px-4 py-3">Memo</th>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Account</td>
+                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3">{account}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">PotentialWallet</td>
+                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3">{eth.potentialWallet.join(",")}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">Message</td>
+                        <td className="px-4 py-3">NA</td>
+                        <td className="px-4 py-3">"{message}"</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">signing ethers</td>
+                        <td className="px-4 py-3"><SigningButtonEthers provider={eth.provider} msg={message} setSigFn={setSigEthers}>Sign</SigningButtonEthers></td>
+                        <td className="px-4 py-3">{sigEthers}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                        <td className="px-4 py-3">signing web3</td>
+                        <td className="px-4 py-3"><SigningButtonWeb3 web3={eth.web3} msg={message} setSigFn={setSigWeb3}>Sign</SigningButtonWeb3></td>
+                        <td className="px-4 py-3">{sigWeb3}</td>
+                        <td className="px-4 py-3"></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
         </>
     )
-
 }
 
-// export const getStaticProps: GetStaticProps<Props> = async (context: GetStaticPropsContext) => {
-//     return {props: { }, 1 }
-// }
+interface SigningProps {
+    msg: string
+    web3?: Web3
+    provider?: ethers.providers.JsonRpcProvider
+    setSigFn: Dispatch<SetStateAction<string>>
+    setMemoFn?: Dispatch<SetStateAction<string>>
+}
+
+const SigningButtonEthers: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        props.provider!.getSigner().signMessage(props.msg)
+            .then((sig) => {
+                props.setSigFn(sig)
+            })
+            .catch((e) => {
+                console.error(e)
+            })
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
+    )
+}
+
+const SigningButtonWeb3: NextComponentType<NextPageContext, {}, SigningProps> = (props) => {
+    const handleClick: MouseEventHandler = async (e) => {
+        const web3 = props.web3!
+        web3.eth.getAccounts((e, accounts) => {
+            if (e) {
+                console.error(e)
+            }
+            web3.eth.personal.sign(props.msg, accounts[0], "", (e, sig) => {
+                if (e) {
+                    console.error(e)
+                }
+                props.setSigFn(sig)
+
+            })
+
+        })
+    }
+
+    return (
+        <button
+            type="submit"
+            className="bg-blue-500 px-4 py-2 text-xs font-semibold tracking-wider text-white rounded hover:bg-blue-600"
+            onClick={handleClick}
+        >
+            {props.children}
+        </button>
+    )
+}
+
 
 export default Page;
