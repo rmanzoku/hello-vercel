@@ -53,8 +53,8 @@ const Ethereum: NextComponentType = ({ children }) => {
         }
 
         if (window.web3) {
-            const p = new ethers.providers.Web3Provider(window.web3)
-            const w = new Web3(window.web3 as any)
+            const p = new ethers.providers.Web3Provider(window.web3.currentProvider)
+            const w = new Web3(window.web3.currentProvider as any)
 
             let potentialWalletName: string[] = []
             const currentProvider = w.currentProvider as any
